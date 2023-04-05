@@ -13,7 +13,7 @@
 # define PURPLE			"\033[38;5;98m"
 # define YELLOW			"\033[38;5;220m"
 # define PINK			"\033[38;5;205m"
-
+# define WHITE			"\033[0;97m"
 
 # include <iostream>
 # include <stack>
@@ -34,7 +34,7 @@ class RPN {
 
 		void		setExpression(const std::string& expression);
 		void		setStack(const std::stack<int>& stack);
-		
+
 		static bool	isValidExpression(const std::string expression);
 		void		compute(void);
 

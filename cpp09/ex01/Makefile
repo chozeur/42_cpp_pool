@@ -16,8 +16,10 @@ TARGET_BONUS		:= RPN-bonus
 
 BUILD				:= release
 
-include sources.mk
-
+SOURCES		+=           		\
+		main.cpp            	\
+		RPN.cpp             	\
+		
 #The Directories, Source, Includes, Objects, Binary and Resources
 SRCDIR				:= .
 INCDIR				:= .
@@ -37,7 +39,7 @@ cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omi
 CFLAGS				:= $(cflags.$(BUILD))
 CPPFLAGS			:= $(cflags.$(BUILD)) -std=c++98
 
-lib.release			:= 
+lib.release			:=
 lib.valgrind		:= $(lib.release)
 lib.debug			:= $(lib.release) -fsanitize=address -fno-omit-frame-pointer
 LIB					:= $(lib.$(BUILD))

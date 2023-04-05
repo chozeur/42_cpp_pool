@@ -49,26 +49,25 @@ bool	RPN::isValidExpression(const std::string expression){
 		num += count(expression, i + '0');
 	int	op = count(expression, '+') + count(expression, '-') + count(expression, '*') + count(expression, '/');
 
-	if (static_cast<size_t>(num + op + count(expression, ' ')) != expression.length()){
-		std::cout << num << ' ' << op << ' ' << count(expression, ' ') << " != " << expression.length() << std::endl;
+	if (static_cast<size_t>(num + op + count(expression, ' ')) != expression.length())
 		return false;
-	}
 
-	if (expression[0] < '0' || expression[0] > '9'){
-		std::cout << "expression[0] = " << expression[0] << std::endl;
+	if (expression[0] < '0' || expression[0] > '9')
 		return false;
-	}
 
-	if (num != op + 1){
-		std::cout << num << " != " << op + 1 << std::endl;
+	if (num != op + 1)
 		return false;
-	}
 
 	return true;
 }
 
 void	RPN::compute(void){
-	std::cout << std::endl << BLUE << "Computing: " << GREEN << this->_expression << RESET << std::endl << std::endl;
+	std::cout << std::endl
+	<< BLUE << BOLD
+	<< "Computing:\t"
+	<< GREEN << BOLD
+	<< this->_expression
+	<< RESET << std::endl << std::endl;
 
 	for (std::string::const_iterator it = this->_expression.begin(); it != this->_expression.end(); ++it){
 		if (*it == ' '){
