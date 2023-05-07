@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include <fstream>
+# include <vector>
 
 class	BitcoinExchange {
 
@@ -17,6 +18,8 @@ class	BitcoinExchange {
 
 		std::string		getDataFileContent(void) const;
 		std::string		getQueriesFileContent(void) const;
+
+		bool			isQueriesFileValid(void) const;
 
 	private:
 		std::fstream	_dataFile;

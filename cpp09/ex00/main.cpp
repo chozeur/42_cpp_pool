@@ -1,10 +1,17 @@
 #include "BitcoinExchange.hpp"
 
-int	main(void) {
-	BitcoinExchange	exchange("data.csv", "queries.txt");
+const char*	dataFilename = "data.csv";
 
-	std::cout << exchange.getDataFileContent() << std::endl;
-	std::cout << exchange.getQueriesFileContent() << std::endl;
+int	main(int ac, char** av, char** env) {
+
+	(void)env;
+
+	if (ac != 2){
+		std::cout << "Usage: " << av[0] << " <queries file>" << std::endl;
+		return (42);
+	}
+
+	BitcoinExchange	exchange(dataFilename, "queries.txt");
 
 	return (0);
 }

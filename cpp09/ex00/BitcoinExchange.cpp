@@ -48,3 +48,17 @@ std::string		BitcoinExchange::getDataFileContent(void) const {return (_dataFileC
 
 std::string		BitcoinExchange::getQueriesFileContent(void) const {return (_queriesFileContent);}
 
+bool			BitcoinExchange::isQueriesFileValid(void) const {
+
+	std::vector<std::string>	queries;
+	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
+		std::string query;
+		while (*it != '\n' && it != _queriesFileContent.end()) {
+			query.push_back(*it);
+			++it;
+		}
+		queries.push_back(query);
+	}
+
+	return (true);
+}
