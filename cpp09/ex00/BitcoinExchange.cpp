@@ -62,7 +62,9 @@ bool			BitcoinExchange::isQueriesFileValid(void) const {
 		}
 	}
 
-	std::cout << "queriesCount: " << queriesCount << std::endl;
+	if (queriesCount == 0) {
+		return (false);
+	}
 
 	std::string	queries[queriesCount];
 	int			tmpQC = queriesCount;

@@ -20,8 +20,9 @@ class	BitcoinExchange {
 
 		BitcoinExchange	&operator=(const BitcoinExchange &rhs);
 
-		std::string		getDataFileContent(void) const;
-		std::string		getQueriesFileContent(void) const;
+		std::string						getDataFileContent(void) const;
+		std::string						getQueriesFileContent(void) const;
+		std::map<std::string, double>	getDataMap(void) const;
 
 		bool			isQueriesFileValid(void) const;
 
@@ -33,6 +34,8 @@ class	BitcoinExchange {
 		std::fstream	_queriesFile;
 		const char*		_queriesFileName;
 		std::string		_queriesFileContent;
+
+		std::map<std::string, double>	_dataMap;
 };
 
 #endif
