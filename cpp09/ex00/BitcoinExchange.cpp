@@ -52,12 +52,54 @@ bool			BitcoinExchange::isQueriesFileValid(void) const {
 
 	std::vector<std::string>	queries;
 	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
-		std::string query;
+		std::string	query;
 		while (*it != '\n' && it != _queriesFileContent.end()) {
 			query.push_back(*it);
 			++it;
 		}
 		queries.push_back(query);
+	}
+
+	for (std::vector<std::string>::const_iterator it = queries.begin(); it != queries.end(); ++it){
+		std::vector<std::string>	data;
+		std::istringstream			iss(*it);
+		std::string					token;
+		while (std::getline(iss, token, ' ')) {
+			if (token.size() != 0){
+				data.push_back(token);
+			}
+		}
+
+		if (data.size() != 3 && data.size() != 0) {
+			return (false);
+		}
+
+		if (data[0].size() != 10) {
+			return (false);
+		} else if (data[0][4] != '-' || data[0][7] != '-') {
+			return (false);
+		} else if (data[0][0] < '0' || data[0][0] > '9') {
+			return (false);
+		} else if (data[0][1] < '0' || data[0][1] > '9') {
+			return (false);
+		} else if (data[0][2] < '0' || data[0][2] > '9') {
+			return (false);
+		} else if (data[0][3] < '0' || data[0][3] > '9') {
+			return (false);
+		} else if (data[0][5] < '0' || data[0][5] > '9') {
+			return (false);
+		} else if (data[0][6] < '0' || data[0][6] > '9') {
+			return (false);
+		} else if (data[0][8] < '0' || data[0][8] > '9') {
+			return (false);
+		} else if (data[0][9] < '0' || data[0][9] > '9') {
+			return (false);
+		} else if (data[1] != "|"){
+			return (false);
+		} else if (std::atof(data[2].c_str()) == 0.0 &&
+			data[2] != "0" && data[2] != "0.0" && data[2] != "0.00") {
+			return (false);
+		}
 	}
 
 	return (true);

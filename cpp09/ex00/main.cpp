@@ -13,5 +13,11 @@ int	main(int ac, char** av, char** env) {
 
 	BitcoinExchange	exchange(dataFilename, "queries.txt");
 
+	if (exchange.isQueriesFileValid() == false) {
+		std::cout << "Queries file is not valid" << std::endl;
+	}
+
+
+
 	return (0);
 }
