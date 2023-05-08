@@ -12,21 +12,47 @@ int	main(int ac, char** av, char** env) {
 		return (42);
 	}
 
-	BitcoinExchange	exchange(dataFilename, av[1]);
-
-	if (exchange.isDataFileValid() == false) {
-		std::cout << "🔴 Data file is not valid" << std::endl << std::endl;
+	BitcoinExchange exchange;
+	try {
+		exchange = BitcoinExchange(dataFilename, av[1]);
+	} catch (std::exception &e) {
 		return (42);
-	} else {
-		std::cout << "🟢 Data file is valid" << std::endl << std::endl;
 	}
 
-	if (exchange.isQueriesFileValid() == false) {
-		std::cout << "🔴 Queries file is not valid" << std::endl << std::endl;
-		return (42);
-	} else {
-		std::cout << "🟢 Queries file is valid" << std::endl << std::endl;
+	int	size = exchange.getQueriesCount();
+	std::cout << "🔘 Queries count: " << size << std::endl;
+	for (int i = 0; i < size; ++i) {
+
+		std::string date = exchange.getQueriesOrder()[i];
+		if (BitcoinExchange::isDateValid(date)) {
+			std::string refDate = exchange.getRefDate(date);
+			double refPrice = exchange.getDataMap()[refDate];
+			if (BitcoinExchange::isAmountValid(refPrice)) {
+
+				std::cout << "🔘 " << date << " => " << refPrice << std::endl;
+
+				if (refDate == date) {
+					std::cout << "";
+				} else {
+					std::cout << "";
+				}
+			} else {
+				std::cout << "🔴 [" << refPrice << "] is not a valid amount" << std::endl;
+				continue ;
+			}
+		} else {
+			std::cout << "🔴 [" << date << "] is not a valid date" << std::endl;
+			continue ;
+		}
+
+
+		std::cout << std::endl;
 	}
+
+
+
+	delete[] exchange.getDataOrder();
+	delete[] exchange.getQueriesOrder();
 
 	return (0);
 }

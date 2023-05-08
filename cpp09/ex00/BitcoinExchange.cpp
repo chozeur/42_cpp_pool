@@ -8,7 +8,7 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange &src) {
 }
 
 BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFileName)
-: _dataFileName(dataFileName), _queriesFileName(queriesFileName) {
+: _dataFileName(dataFileName), _dataCount(-1), _queriesFileName(queriesFileName), _queriesCount(0) {
 
 	_dataFile.open(_dataFileName);
 	if (_dataFile.is_open()){
@@ -16,11 +16,13 @@ BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFi
 		while (std::getline(_dataFile, line)) {
 			_dataFileContent += line;
 			_dataFileContent.push_back('\n');
+			++_dataCount;
 		}
 		_dataFile.close();
 	} else {
 		throw std::runtime_error("Error: could not open data file");
 	}
+	_dataOrder = new std::string[_dataCount];
 
 	_queriesFile.open(_queriesFileName);
 	if (_queriesFile.is_open()){
@@ -28,27 +30,69 @@ BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFi
 		while (std::getline(_queriesFile, line)) {
 			_queriesFileContent += line;
 			_queriesFileContent.push_back('\n');
+			++_queriesCount;
 		}
 		_queriesFile.close();
 	} else {
 		throw std::runtime_error("Error: could not open queries file");
 	}
+	_queriesOrder = new std::string[_queriesCount];
+
+	if (isDataFileValid() == false) {
+		std::cout << "🔴 Data file is not valid" << std::endl << std::endl;
+		throw std::runtime_error("Error: " + std::string(_dataFileName) + " file is not valid");
+	} else {
+		std::cout << "🟢 Data file is valid" << std::endl << std::endl;
+	}
+
+	if (isQueriesFileValid() == false) {
+		std::cout << "🔴 Queries file is not valid" << std::endl << std::endl;
+		throw std::runtime_error("Error: " + std::string(_queriesFileName) + " file is not valid");
+	} else {
+		std::cout << "🟢 Queries file is valid" << std::endl << std::endl;
+	}
 
 	return ;
 }
 
-BitcoinExchange::~BitcoinExchange(void) {return ;}
+BitcoinExchange::~BitcoinExchange(void) {
+	_dataFile.close();
+	_queriesFile.close();
+	return ;
+}
 
 BitcoinExchange&	BitcoinExchange::operator=(const BitcoinExchange &rhs) {
-	(void)rhs;
+	if (this != &rhs){
+		_dataFile.close();
+		_dataFile.open(rhs._dataFileName);
+		_dataFileName = rhs._dataFileName;
+		_dataFileContent = rhs._dataFileContent;
+		_dataOrder = rhs._dataOrder;	// no deep copy because it's a pointer to an array
+		_dataMap = rhs._dataMap;
+		_queriesFile.close();
+		_queriesFile.open(rhs._queriesFileName);
+		_queriesFileName = rhs._queriesFileName;
+		_queriesFileContent = rhs._queriesFileContent;
+		_queriesOrder = rhs._queriesOrder;	// no deep copy because it's a pointer to an array
+		_queriesCount = rhs._queriesCount;
+		_queriesMap = rhs._queriesMap;
+	}
 	return (*this);
 }
 
 std::string						BitcoinExchange::getDataFileContent(void) const {return (_dataFileContent);}
 
-std::string						BitcoinExchange::getQueriesFileContent(void) const {return (_queriesFileContent);}
+std::string*					BitcoinExchange::getDataOrder(void) const {return (_dataOrder);}
 
 std::map<std::string, double>	BitcoinExchange::getDataMap(void) const {return (_dataMap);}
+
+std::string						BitcoinExchange::getQueriesFileContent(void) const {return (_queriesFileContent);}
+
+std::map<std::string, double>	BitcoinExchange::getQueriesMap(void) const {return (_queriesMap);}
+
+std::string*					BitcoinExchange::getQueriesOrder(void) const {return (_queriesOrder);}
+
+int								BitcoinExchange::getQueriesCount(void) const {return (_queriesCount);}
 
 bool	BitcoinExchange::isDataFileValid(void) {
 	std::istringstream			iss(_dataFileContent);
@@ -104,14 +148,18 @@ bool	BitcoinExchange::isDataFileValid(void) {
 					}
 				}
 			}
-			_dataMap[data[0]] = std::atof(data[1].c_str());
+			std::stringstream	ss(data[1]);
+			double				d;
+			ss >> d;
+			_dataMap[data[0]] = d;
+			_dataOrder[i - 1] = data[0];
 		}
 		++i;
 	}
 	return (true);
 }
 
-bool	BitcoinExchange::isQueriesFileValid(void) const {
+bool	BitcoinExchange::isQueriesFileValid(void) {
 
 	int	queriesCount = 0;
 	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
@@ -190,8 +238,87 @@ bool	BitcoinExchange::isQueriesFileValid(void) const {
 					}
 				}
 			}
+			std::stringstream	ss(data[2]);
+			double				d;
+			ss >> d;
+			_queriesMap[data[0]] = d;
+			_queriesOrder[i] = data[0];
 		}
 	}
 
 	return (true);
+}
+
+std::string	BitcoinExchange::getRefDate(std::string date) const {
+	std::string	refDate = "2009-01-02";
+	for (int i = 0; i < _dataCount; ++i) {
+		if (_dataOrder[i] == date) {
+			return (date);
+		} else if (BitcoinExchange::highestDate(_dataOrder[i], date) == date) {
+			refDate = _dataOrder[i];
+		} else {
+			return (refDate);
+		}
+	}
+	return (refDate);
+}
+
+void	BitcoinExchange::printMap(std::map<std::string, double> map) {
+	for (std::map<std::string, double>::const_iterator it = map.begin(); it != map.end(); ++it) {
+		std::cout << it->first << " => " << it->second << std::endl;
+	}
+	return ;
+}
+
+bool	BitcoinExchange::isDateValid(std::string date) {
+	std::stringstream	ss(date);
+	int					y, m, d;
+	char				c1, c2;
+	ss >> y >> c1 >> m >> c2 >> d;
+	if (ss.fail() || c1 != '-' || c2 != '-' || ss.peek() != EOF) {
+		return (false);
+	} else if (y < 2009) {
+		return (false);
+	} else if (y == 2009 && m == 1 && d < 2) {
+		return (false);
+	} else if (m < 1 || m > 12) {
+		return (false);
+	} else if (d < 1 || d > 31) {
+		return (false);
+	} else if (d >= 28 && m == 2 && y % 4 != 0) {
+		return (false);
+	} else if (d >= 29 && m == 2 && y % 4 == 0) {
+		return (false);
+	} else if (d >= 31 && (m == 4 || m == 6 || m == 9 || m == 11)) {
+		return (false);
+	} else {return (true);}
+}
+
+bool	BitcoinExchange::isAmountValid(double amount) {
+	if (amount < 0 || amount > 1000) {
+		return (false);
+	} else {return (true);}
+}
+
+std::string	BitcoinExchange::highestDate(std::string date1, std::string date2) {
+	std::stringstream	ss1(date1);
+	std::stringstream	ss2(date2);
+	int					y1, m1, d1;
+	int					y2, m2, d2;
+	char				c1, c2;
+	ss1 >> y1 >> c1 >> m1 >> c2 >> d1;
+	ss2 >> y2 >> c1 >> m2 >> c2 >> d2;
+	if (y1 > y2) {
+		return (date1);
+	} else if (y1 < y2) {
+		return (date2);
+	} else if (m1 > m2) {
+		return (date1);
+	} else if (m1 < m2) {
+		return (date2);
+	} else if (d1 > d2) {
+		return (date1);
+	} else if (d1 < d2) {
+		return (date2);
+	} else {return (date1);}
 }
