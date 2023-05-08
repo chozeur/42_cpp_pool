@@ -50,28 +50,47 @@ std::string		BitcoinExchange::getQueriesFileContent(void) const {return (_querie
 
 bool			BitcoinExchange::isQueriesFileValid(void) const {
 
-	std::vector<std::string>	queries;
+	int	queriesCount = 0;
 	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
 		std::string	query;
 		while (*it != '\n' && it != _queriesFileContent.end()) {
 			query.push_back(*it);
 			++it;
 		}
-		queries.push_back(query);
+		if (query.size() != 0) {
+			++queriesCount;
+		}
 	}
 
-	for (std::vector<std::string>::const_iterator it = queries.begin(); it != queries.end(); ++it){
-		std::vector<std::string>	data;
-		std::istringstream			iss(*it);
-		std::string					token;
-		while (std::getline(iss, token, ' ')) {
-			if (token.size() != 0){
-				data.push_back(token);
-			}
-		}
+	std::cout << "queriesCount: " << queriesCount << std::endl;
 
-		if (data.size() != 3 && data.size() != 0) {
-			return (false);
+	std::string	queries[queriesCount];
+	int			tmpQC = queriesCount;
+	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
+		std::string	query;
+		while (*it != '\n' && it != _queriesFileContent.end()) {
+			query.push_back(*it);
+			++it;
+		}
+		if (query.size() != 0) {
+			queries[tmpQC - 1] = query;
+			--tmpQC;
+		}
+	}
+
+	for (int i = 0; i < queriesCount; ++i) {
+		std::cout << queries[i] << std::endl;
+		std::string	data[3];
+		std::istringstream			iss(queries[i]);
+		std::string					token;
+		int							j = 0;
+		while (std::getline(iss, token, ' ')) {
+			if (j > 2) {
+				return (false);
+			}
+			if (token.size() != 0){
+				data[j++] = token;
+			}
 		}
 
 		if (data[0].size() != 10) {
@@ -96,9 +115,18 @@ bool			BitcoinExchange::isQueriesFileValid(void) const {
 			return (false);
 		} else if (data[1] != "|"){
 			return (false);
-		} else if (std::atof(data[2].c_str()) == 0.0 &&
-			data[2] != "0" && data[2] != "0.0" && data[2] != "0.00") {
-			return (false);
+		} else if (42) {
+			int	dotCount = 0;
+			for (std::string::const_iterator it = data[2].begin(); it != data[2].end(); ++it) {
+				if (*it == '.') {
+					++dotCount;
+				}
+				if (*it < '0' || *it > '9') {
+					if (*it != '.' || dotCount > 1) {
+						return (false);
+					}
+				}
+			}
 		}
 	}
 

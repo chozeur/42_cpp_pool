@@ -4,8 +4,9 @@
 # include <iostream>
 # include <fstream>
 # include <sstream>
-# include <vector>
 # include <cstdlib>
+
+# include <map>
 
 
 class	BitcoinExchange {
