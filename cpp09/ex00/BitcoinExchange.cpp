@@ -51,6 +51,39 @@ BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFi
 					data[j++] = token2;
 				}
 			}
+			if (data[0].size() != 10) {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][4] != '-' || data[0][7] != '-') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][0] < '0' || data[0][0] > '9') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][1] < '0' || data[0][1] > '9') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][2] < '0' || data[0][2] > '9') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][3] < '0' || data[0][3] > '9') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][5] < '0' || data[0][5] > '9') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][6] < '0' || data[0][6] > '9') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][8] < '0' || data[0][8] > '9') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (data[0][9] < '0' || data[0][9] > '9') {
+				throw std::runtime_error("Error: data file is not valid");
+			} else if (42) {
+				int	dotCount = 0;
+				for (std::string::const_iterator it = data[2].begin(); it != data[2].end(); ++it) {
+					if (*it == '.') {
+						++dotCount;
+					}
+					if (*it < '0' || *it > '9') {
+						if (*it != '.' || dotCount > 1) {
+							throw std::runtime_error("Error: data file is not valid");
+						}
+					}
+				}
+			}
 			_dataMap[data[0]] = std::atof(data[1].c_str());
 		}
 		++i;
@@ -106,7 +139,7 @@ bool			BitcoinExchange::isQueriesFileValid(void) const {
 
 	for (int i = 0; i < queriesCount; ++i) {
 		std::cout << queries[i] << std::endl;
-		std::string	data[3];
+		std::string					data[3];
 		std::istringstream			iss(queries[i]);
 		std::string					token;
 		int							j = 0;
