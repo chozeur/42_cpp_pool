@@ -5,6 +5,7 @@
 # include <fstream>
 # include <sstream>
 # include <cstdlib>
+# include <stdlib.h>
 
 # include <map>
 
@@ -22,10 +23,11 @@ class	BitcoinExchange {
 		std::string						getQueriesFileContent(void) const;
 		std::map<std::string, double>	getDataMap(void) const;
 
+		bool			isDataFileValid(void);
 		bool			isQueriesFileValid(void) const;
 
 	private:
-	
+
 		BitcoinExchange(void);
 		BitcoinExchange(const BitcoinExchange &src);
 
