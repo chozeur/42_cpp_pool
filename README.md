@@ -1,7 +1,7 @@
 # 42 C++ Pool
 
 <p align="center">
-	<table align="left" frame="void">
+	<table align="center" frame="void">
 		<tr>
 			<td align="center">
 				cpp00
