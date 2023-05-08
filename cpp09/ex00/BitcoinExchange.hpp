@@ -13,8 +13,6 @@ class	BitcoinExchange {
 
 	public:
 
-		BitcoinExchange(void);
-		BitcoinExchange(const BitcoinExchange &src);
 		BitcoinExchange(const char* dataFileName, const char* queriesFileName);
 		~BitcoinExchange(void);
 
@@ -27,6 +25,10 @@ class	BitcoinExchange {
 		bool			isQueriesFileValid(void) const;
 
 	private:
+	
+		BitcoinExchange(void);
+		BitcoinExchange(const BitcoinExchange &src);
+
 		std::fstream	_dataFile;
 		const char*		_dataFileName;
 		std::string		_dataFileContent;

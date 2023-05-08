@@ -34,6 +34,28 @@ BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFi
 		throw std::runtime_error("Error: could not open queries file");
 	}
 
+	std::istringstream			iss(_dataFileContent);
+	std::string					token;
+	int							i = 0;
+	while (std::getline(iss, token, '\n')) {
+		if (i != 0) {
+			std::string	data[2];
+			std::istringstream			iss2(token);
+			std::string					token2;
+			int							j = 0;
+			while (std::getline(iss2, token2, ',')) {
+				if (j > 1) {
+					throw std::runtime_error("Error: data file is not valid");
+				}
+				if (token2.size() != 0){
+					data[j++] = token2;
+				}
+			}
+			_dataMap[data[0]] = std::atof(data[1].c_str());
+		}
+		++i;
+	}
+
 	return ;
 }
 
@@ -47,6 +69,8 @@ BitcoinExchange	&BitcoinExchange::operator=(const BitcoinExchange &rhs) {
 std::string		BitcoinExchange::getDataFileContent(void) const {return (_dataFileContent);}
 
 std::string		BitcoinExchange::getQueriesFileContent(void) const {return (_queriesFileContent);}
+
+std::map<std::string, double>	BitcoinExchange::getDataMap(void) const {return (_dataMap);}
 
 bool			BitcoinExchange::isQueriesFileValid(void) const {
 
