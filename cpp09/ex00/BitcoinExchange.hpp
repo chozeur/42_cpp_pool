@@ -38,6 +38,7 @@ class	BitcoinExchange {
 		static void			printMap(std::map<std::string, double> map);
 		static bool			isDateValid(std::string date);
 		static bool			isAmountValid(double amount);
+		static bool			isInputValid(std::string input);
 		static std::string	highestDate(std::string date1, std::string date2);
 
 	private:

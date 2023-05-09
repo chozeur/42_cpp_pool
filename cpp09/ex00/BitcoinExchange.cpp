@@ -220,6 +220,7 @@ bool	BitcoinExchange::isQueriesFileValid(void) {
 		} else if (data[1] != "|"){
 			return (false);
 		} else if (42) {
+			bool	isValid = true;
 			int	dotCount = 0;
 			for (std::string::const_iterator it = data[2].begin(); it != data[2].end(); ++it) {
 				if (*it == '.') {
@@ -227,14 +228,14 @@ bool	BitcoinExchange::isQueriesFileValid(void) {
 				}
 				if (*it < '0' || *it > '9') {
 					if (*it != '.' || dotCount > 1) {
-						return (false);
+						isValid = false;
 					}
 				}
 			}
 			std::stringstream	ss(data[2]);
 			double				d;
 			ss >> d;
-			_queriesMap[data[0]] = d;
+			_queriesMap[data[0]] = isValid ? d : -1;
 			_queriesOrder[i] = data[0];
 		}
 	}
@@ -290,7 +291,50 @@ bool	BitcoinExchange::isDateValid(std::string date) {
 bool	BitcoinExchange::isAmountValid(double amount) {
 	if (amount < 0 || amount > 1000) {
 		return (false);
-	} else {return (true);}
+	}
+	return (true);
+}
+
+bool	BitcoinExchange::isInputValid(std::string input){
+
+	std::string	data[3];
+	std::istringstream			iss(input);
+	std::string					token;
+	int							i = 0;
+	while (std::getline(iss, token, ' ')) {
+		if (i > 2) {
+			return (false);
+		}
+		if (token.size() != 0){
+			data[i++] = token;
+		}
+	}
+
+	if (data[0].size() != 10) {
+		return (false);
+	} else if (data[0][4] != '-' || data[0][7] != '-') {
+		return (false);
+	} else if (data[0][0] < '0' || data[0][0] > '9') {
+		return (false);
+	} else if (data[0][1] < '0' || data[0][1] > '9') {
+		return (false);
+	} else if (data[0][2] < '0' || data[0][2] > '9') {
+		return (false);
+	} else if (data[0][3] < '0' || data[0][3] > '9') {
+		return (false);
+	} else if (data[0][5] < '0' || data[0][5] > '9') {
+		return (false);
+	} else if (data[0][6] < '0' || data[0][6] > '9') {
+		return (false);
+	} else if (data[0][8] < '0' || data[0][8] > '9') {
+		return (false);
+	} else if (data[0][9] < '0' || data[0][9] > '9') {
+		return (false);
+	} else if (data[1] != "|"){
+		return (false);
+	}
+
+	return (true);
 }
 
 std::string	BitcoinExchange::highestDate(std::string date1, std::string date2) {
