@@ -162,15 +162,6 @@ bool	BitcoinExchange::isDataFileValid(void) {
 
 bool	BitcoinExchange::isQueriesFileValid(void) {
 
-	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
-		std::string	line;
-		while (*it != '\n' && it != _queriesFileContent.end()) {
-			line.push_back(*it);
-			++it;
-		}
-		break ;
-	}
-
 	int	queriesCount = 0;
 	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
 		std::string	query;
