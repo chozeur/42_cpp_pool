@@ -20,7 +20,7 @@ int	main(int ac, char** av, char** env) {
 	}
 
 	int	size = exchange.getQueriesCount();
-	std::cout << "🔘 Queries count: " << size << std::endl;
+	std::cout << "ℹ️ Queries count: " << size << std::endl << std::endl;
 	for (int i = 0; i < size; ++i) {
 
 		std::string date = exchange.getQueriesOrder()[i];
@@ -29,7 +29,7 @@ int	main(int ac, char** av, char** env) {
 			double refPrice = exchange.getDataMap()[refDate];
 			if (BitcoinExchange::isAmountValid(refPrice)) {
 
-				std::cout << "🔘 " << date << " => " << refPrice << std::endl;
+				std::cout << "🔘 " << date << " => " << refPrice * exchange.getQueriesMap()[date] << std::endl << std::endl;
 
 				if (refDate == date) {
 					std::cout << "";
@@ -37,19 +37,14 @@ int	main(int ac, char** av, char** env) {
 					std::cout << "";
 				}
 			} else {
-				std::cout << "🔴 [" << refPrice << "] is not a valid amount" << std::endl;
+				std::cout << "🔴 [" << refPrice << "] is not a valid amount" << std::endl << std::endl;
 				continue ;
 			}
 		} else {
-			std::cout << "🔴 [" << date << "] is not a valid date" << std::endl;
+			std::cout << "🔴 [" << date << "] is not a valid date" << std::endl << std::endl;
 			continue ;
 		}
-
-
-		std::cout << std::endl;
 	}
-
-
 
 	delete[] exchange.getDataOrder();
 	delete[] exchange.getQueriesOrder();
