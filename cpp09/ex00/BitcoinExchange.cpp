@@ -68,6 +68,7 @@ BitcoinExchange&	BitcoinExchange::operator=(const BitcoinExchange &rhs) {
 		_dataFileName = rhs._dataFileName;
 		_dataFileContent = rhs._dataFileContent;
 		_dataOrder = rhs._dataOrder;	// no deep copy because it's a pointer to an array
+		_dataCount = rhs._dataCount;
 		_dataMap = rhs._dataMap;
 		_queriesFile.close();
 		_queriesFile.open(rhs._queriesFileName);
