@@ -162,23 +162,15 @@ bool	BitcoinExchange::isDataFileValid(void) {
 
 bool	BitcoinExchange::isQueriesFileValid(void) {
 
-	int	queriesCount = 0;
 	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
 		std::string	query;
 		while (*it != '\n' && it != _queriesFileContent.end()) {
 			query.push_back(*it);
 			++it;
 		}
-		if (query.size() != 0) {
-			++queriesCount;
-		}
 	}
 
-	if (queriesCount == 0) {
-		return (false);
-	}
-
-	std::string	queries[queriesCount];
+	std::string	queries[_queriesCount];
 	int			i = 0;
 	for (std::string::const_iterator it = _queriesFileContent.begin(); it != _queriesFileContent.end(); ++it) {
 		std::string	query;
@@ -191,7 +183,7 @@ bool	BitcoinExchange::isQueriesFileValid(void) {
 		}
 	}
 
-	for (int i = 0; i < queriesCount; ++i) {
+	for (int i = 0; i < _queriesCount; ++i) {
 		std::string	data[3];
 		std::istringstream			iss(queries[i]);
 		std::string					token;
