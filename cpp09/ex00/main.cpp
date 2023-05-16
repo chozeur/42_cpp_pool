@@ -3,17 +3,14 @@
 const char*	dataFilename = "data.csv";
 
 int	main(int ac, char** av, char** env) {
-
-	// (void)ac;
-	// (void)av;
 	(void)env;
-	system("clear"); std::cout << std::endl << std::endl;
+
+	system("clear"); std::cout << std::endl << "\033[1m" << "\033[4m" << "Bitcoin Exchange" << "\033[00m" << std::endl << std::endl;
 
 	if (ac != 2){
 		std::cout << "Usage: " << av[0] << " <queries file>" << std::endl;
 		return (42);
 	}
-
 
 	BitcoinExchange exchange;
 
@@ -24,13 +21,6 @@ int	main(int ac, char** av, char** env) {
 		return (42);
 	}
 
-	// BitcoinExchange exchange;
-	// try {
-	// 	exchange = BitcoinExchange(dataFilename, av[1]);
-	// } catch (std::exception &e) {
-	// 	return (42);
-	// }
-
 	exchange.fillDataMapOrder();
 	exchange.fillQueriesMapOrder();
 
@@ -39,7 +29,10 @@ int	main(int ac, char** av, char** env) {
 	int 				i = 0;
 	while (getline(ss, queries[i++], '\n')) {}
 
-	for (int i = 0; i < exchange.getQueriesCount(); ++i) {
+	for (int i = 1; i < exchange.getQueriesCount(); ++i) {
+		if (queries[i].size() == 0) {
+			continue;
+		}
 		try {
 			BitcoinExchange::checkInput(queries[i]);
 			std::stringstream	ss(queries[i]);

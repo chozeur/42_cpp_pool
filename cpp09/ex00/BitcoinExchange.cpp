@@ -19,7 +19,6 @@ BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFi
 			++_dataCount;
 		}
 		_dataFile.close();
-		std::cout << "🟢 " << dataFileName << std::endl << std::endl;
 	} else {
 		throw std::runtime_error("Error: could not open data file");
 	}
@@ -34,7 +33,6 @@ BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFi
 			++_queriesCount;
 		}
 		_queriesFile.close();
-		std::cout << "🟢 " << queriesFileName << std::endl << std::endl;
 	} else {
 		throw std::runtime_error("Error: could not open queries file");
 	}
@@ -220,7 +218,6 @@ bool	BitcoinExchange::isAmountValid(std::string amount) {
 }
 
 void	BitcoinExchange::checkInput(std::string input){
-
 	std::string					data[3];
 	std::istringstream			iss(input);
 	std::string					token;
@@ -237,9 +234,9 @@ void	BitcoinExchange::checkInput(std::string input){
 	}
 
 	if (!BitcoinExchange::isDateValid(data[0])) {
-		throw	std::runtime_error("Error: date is not valid");
+		throw	std::runtime_error("Error: date is not valid (" + data[0] + ")");
 	} else if (!BitcoinExchange::isAmountValid(data[2])) {
-		throw	std::runtime_error("Error: amount is not valid");
+		throw	std::runtime_error("Error: amount is not valid (" + data[2] + ")");
 	}
 
 	return ;
