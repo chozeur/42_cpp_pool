@@ -4,6 +4,8 @@ const char*	dataFilename = "data.csv";
 
 int	main(int ac, char** av, char** env) {
 
+	// (void)ac;
+	// (void)av;
 	(void)env;
 	system("clear"); std::cout << std::endl << std::endl;
 
@@ -12,37 +14,42 @@ int	main(int ac, char** av, char** env) {
 		return (42);
 	}
 
+
 	BitcoinExchange exchange;
+
 	try {
 		exchange = BitcoinExchange(dataFilename, av[1]);
 	} catch (std::exception &e) {
+		std::cerr << "🔴 " << e.what() << std::endl << std::endl;
 		return (42);
 	}
 
-	int	size = exchange.getQueriesCount();
-	std::cout << "ℹ️ Queries count: " << size << std::endl << std::endl;
-	for (int i = 0; i < size; ++i) {
+	// BitcoinExchange exchange;
+	// try {
+	// 	exchange = BitcoinExchange(dataFilename, av[1]);
+	// } catch (std::exception &e) {
+	// 	return (42);
+	// }
 
-		std::string date = exchange.getQueriesOrder()[i];
-		if (BitcoinExchange::isDateValid(date)) {
-			std::string refDate = exchange.getRefDate(date);
-			double refPrice = exchange.getDataMap()[refDate];
-			if (BitcoinExchange::isAmountValid(refPrice)) {
+	exchange.fillDataMapOrder();
+	exchange.fillQueriesMapOrder();
 
-				std::cout << "🔘 " << date << " => " << refPrice * exchange.getQueriesMap()[date] << std::endl << std::endl;
+	std::string			queries[exchange.getQueriesCount() + 1];
+	std::stringstream	ss(exchange.getQueriesFileContent());
+	int 				i = 0;
+	while (getline(ss, queries[i++], '\n')) {}
 
-				if (refDate == date) {
-					std::cout << "";
-				} else {
-					std::cout << "";
-				}
-			} else {
-				std::cout << "🔴 [" << refPrice << "] is not a valid amount" << std::endl << std::endl;
-				continue ;
-			}
-		} else {
-			std::cout << "🔴 [" << date << "] is not a valid date" << std::endl << std::endl;
-			continue ;
+	for (int i = 0; i < exchange.getQueriesCount(); ++i) {
+		try {
+			BitcoinExchange::checkInput(queries[i]);
+			std::stringstream	ss(queries[i]);
+			std::string			date;
+			std::string			sep;
+			double				amount;
+			ss >> date >> sep >> amount;
+			std::cout << "📅 " << date << " => " << amount * exchange.getDataMap()[exchange.getRefDate(date)] << std::endl;
+		} catch (std::exception &e) {
+			std::cerr << "❗ " << e.what() << std::endl;
 		}
 	}
 

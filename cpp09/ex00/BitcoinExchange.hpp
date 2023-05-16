@@ -7,6 +7,7 @@
 # include <cstdlib>
 # include <stdlib.h>
 # include <utility>
+# include <stdexcept>
 
 # include <map>
 
@@ -25,6 +26,7 @@ class	BitcoinExchange {
 		std::string						getDataFileContent(void) const;
 		std::string*					getDataOrder(void) const;
 		std::map<std::string, double>	getDataMap(void) const;
+		int								getDataCount(void) const;
 		std::string						getQueriesFileContent(void) const;
 		std::map<std::string, double>	getQueriesMap(void) const;
 		std::string*					getQueriesOrder(void) const;
@@ -34,11 +36,13 @@ class	BitcoinExchange {
 		bool			isQueriesFileValid(void);	// no const because the map is filled here
 
 		std::string		getRefDate(std::string date) const;
+		void			fillDataMapOrder(void);
+		void			fillQueriesMapOrder(void);
 
 		static void			printMap(std::map<std::string, double> map);
 		static bool			isDateValid(std::string date);
-		static bool			isAmountValid(double amount);
-		static bool			isInputValid(std::string input);
+		static bool			isAmountValid(std::string amount);
+		static void			checkInput(std::string input);
 		static std::string	highestDate(std::string date1, std::string date2);
 
 	private:

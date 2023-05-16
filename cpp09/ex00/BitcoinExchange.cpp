@@ -19,6 +19,7 @@ BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFi
 			++_dataCount;
 		}
 		_dataFile.close();
+		std::cout << "🟢 " << dataFileName << std::endl << std::endl;
 	} else {
 		throw std::runtime_error("Error: could not open data file");
 	}
@@ -33,24 +34,25 @@ BitcoinExchange::BitcoinExchange(const char* dataFileName, const char* queriesFi
 			++_queriesCount;
 		}
 		_queriesFile.close();
+		std::cout << "🟢 " << queriesFileName << std::endl << std::endl;
 	} else {
 		throw std::runtime_error("Error: could not open queries file");
 	}
 	_queriesOrder = new std::string[_queriesCount];
 
-	if (isDataFileValid() == false) {
-		std::cout << "🔴 Data file is not valid" << std::endl << std::endl;
-		throw std::runtime_error("Error: " + std::string(_dataFileName) + " file is not valid");
-	} else {
-		std::cout << "🟢 Data file is valid" << std::endl << std::endl;
-	}
+	// if (isDataFileValid() == false) {
+	// 	std::cout << "🔴 Data file is not valid" << std::endl << std::endl;
+	// 	throw std::runtime_error("Error: " + std::string(_dataFileName) + " file is not valid");
+	// } else {
+	// 	std::cout << "🟢 Data file is valid" << std::endl << std::endl;
+	// }
 
-	if (isQueriesFileValid() == false) {
-		std::cout << "🔴 Queries file is not valid" << std::endl << std::endl;
-		throw std::runtime_error("Error: " + std::string(_queriesFileName) + " file is not valid");
-	} else {
-		std::cout << "🟢 Queries file is valid" << std::endl << std::endl;
-	}
+	// if (isQueriesFileValid() == false) {
+	// 	std::cout << "🔴 Queries file is not valid" << std::endl << std::endl;
+	// 	throw std::runtime_error("Error: " + std::string(_queriesFileName) + " file is not valid");
+	// } else {
+	// 	std::cout << "🟢 Queries file is valid" << std::endl << std::endl;
+	// }
 
 	return ;
 }
@@ -86,6 +88,8 @@ std::string						BitcoinExchange::getDataFileContent(void) const {return (_dataF
 std::string*					BitcoinExchange::getDataOrder(void) const {return (_dataOrder);}
 
 std::map<std::string, double>	BitcoinExchange::getDataMap(void) const {return (_dataMap);}
+
+int								BitcoinExchange::getDataCount(void) const {return (_dataCount);}
 
 std::string						BitcoinExchange::getQueriesFileContent(void) const {return (_queriesFileContent);}
 
@@ -257,6 +261,76 @@ std::string	BitcoinExchange::getRefDate(std::string date) const {
 	return (refDate);
 }
 
+void	BitcoinExchange::fillDataMapOrder(void){
+	std::istringstream			iss(_dataFileContent);
+	std::string					token;
+	int							i = 0;
+	while (std::getline(iss, token, '\n')) {
+		// skip empty lines
+		if (i > 0 && token.size() == 0) {
+			continue;
+		}
+		// skip first line
+		if (i != 0) {
+			std::string					data[2];
+			std::istringstream			iss2(token);
+			std::string					token2;
+			int							j = 0;
+			while (std::getline(iss2, token2, ',')) {
+				if (j > 1) {
+					throw std::runtime_error("Unexpected error");
+				}
+				// skip white spaces
+				if (token2.size() != 0){
+					data[j++] = token2;
+				}
+			}
+			std::stringstream	ss(data[1]);
+			double				d;
+			ss >> d;
+			_dataMap[data[0]] = d;
+			_dataOrder[i - 1] = data[0];
+		}
+		++i;
+	}
+	return ;
+}
+
+void	BitcoinExchange::fillQueriesMapOrder(void) {
+	std::istringstream			iss(_queriesFileContent);
+	std::string					token;
+	int							i = 0;
+	while (std::getline(iss, token, '\n')) {
+		// skip empty lines
+		if (i > 0 && token.size() == 0) {
+			continue;
+		}
+		// skip first line
+		if (i != 0) {
+			std::string					data[3];
+			std::istringstream			iss2(token);
+			std::string					token2;
+			int							j = 0;
+			while (std::getline(iss2, token2, ' ')) {
+				if (j > 2) {
+					throw std::runtime_error("Unexpected error");
+				}
+				// skip white spaces
+				if (token2.size() != 0){
+					data[j++] = token2;
+				}
+			}
+			std::stringstream	ss(data[2]);
+			double				d;
+			ss >> d;
+			_queriesMap[data[0]] = d;
+			_queriesOrder[i - 1] = data[0];
+		}
+		++i;
+	}
+	return ;
+}
+
 void	BitcoinExchange::printMap(std::map<std::string, double> map) {
 	for (std::map<std::string, double>::const_iterator it = map.begin(); it != map.end(); ++it) {
 		std::cout << it->first << " => " << it->second << std::endl;
@@ -279,62 +353,58 @@ bool	BitcoinExchange::isDateValid(std::string date) {
 		return (false);
 	} else if (d < 1 || d > 31) {
 		return (false);
-	} else if (d >= 28 && m == 2 && y % 4 != 0) {
-		return (false);
-	} else if (d >= 29 && m == 2 && y % 4 == 0) {
+	} else if (d >= 29 && m == 2 && y % 4 != 0) {
 		return (false);
 	} else if (d >= 31 && (m == 4 || m == 6 || m == 9 || m == 11)) {
 		return (false);
 	} else {return (true);}
 }
 
-bool	BitcoinExchange::isAmountValid(double amount) {
-	if (amount < 0 || amount > 1000) {
+bool	BitcoinExchange::isAmountValid(std::string amount) {
+	int	dotCount = 0;
+	for (std::string::const_iterator it = amount.begin(); it != amount.end(); ++it) {
+		if (*it == '.') {
+			++dotCount;
+		}
+		if (*it < '0' || *it > '9') {
+			if (*it != '.' || dotCount > 1) {
+				return (false);
+			}
+		}
+	}
+	std::stringstream	ss(amount);
+	double				a;
+	ss >> a;
+	if (a < 0 || a > 1000) {
 		return (false);
 	}
 	return (true);
 }
 
-bool	BitcoinExchange::isInputValid(std::string input){
+void	BitcoinExchange::checkInput(std::string input){
 
-	std::string	data[3];
+	std::string					data[3];
 	std::istringstream			iss(input);
 	std::string					token;
 	int							i = 0;
 	while (std::getline(iss, token, ' ')) {
 		if (i > 2) {
-			return (false);
+			throw	std::runtime_error("Error: too many arguments in line");
 		}
 		if (token.size() != 0){
 			data[i++] = token;
 		}
+	} if (i != 3 || data[1] != "|"){
+		throw	std::runtime_error("Error: wrong input format");
 	}
 
-	if (data[0].size() != 10) {
-		return (false);
-	} else if (data[0][4] != '-' || data[0][7] != '-') {
-		return (false);
-	} else if (data[0][0] < '0' || data[0][0] > '9') {
-		return (false);
-	} else if (data[0][1] < '0' || data[0][1] > '9') {
-		return (false);
-	} else if (data[0][2] < '0' || data[0][2] > '9') {
-		return (false);
-	} else if (data[0][3] < '0' || data[0][3] > '9') {
-		return (false);
-	} else if (data[0][5] < '0' || data[0][5] > '9') {
-		return (false);
-	} else if (data[0][6] < '0' || data[0][6] > '9') {
-		return (false);
-	} else if (data[0][8] < '0' || data[0][8] > '9') {
-		return (false);
-	} else if (data[0][9] < '0' || data[0][9] > '9') {
-		return (false);
-	} else if (data[1] != "|"){
-		return (false);
+	if (!BitcoinExchange::isDateValid(data[0])) {
+		throw	std::runtime_error("Error: date is not valid");
+	} else if (!BitcoinExchange::isAmountValid(data[2])) {
+		throw	std::runtime_error("Error: amount is not valid");
 	}
 
-	return (true);
+	return ;
 }
 
 std::string	BitcoinExchange::highestDate(std::string date1, std::string date2) {
