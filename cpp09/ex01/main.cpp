@@ -24,14 +24,6 @@ int	main(int ac, char **av, char **env) {
 
 	rpn.compute();
 
-	if (rpn.getStack().size() != 1) {
-		std::cout << std::endl
-		<< RED << BOLD
-		<< "Invalid expression"
-		<< RESET << std::endl << std::endl;
-		return (1);
-	}
-
 	std::cout << std::endl
 	<< BLUE << "Result:\t\t"
 	<< GREEN << rpn.getStack().top() << RESET << std::endl << std::endl;

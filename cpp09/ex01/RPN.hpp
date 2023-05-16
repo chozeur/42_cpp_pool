@@ -29,22 +29,22 @@ class RPN {
 
 		RPN& operator=(const RPN& rhs);
 
-		std::string	getExpression(void) const;
-		std::stack<int>	getStack(void) const;
+		std::string		getExpression(void) const;
+		std::stack<double>	getStack(void) const;
 
-		void		setExpression(const std::string& expression);
-		void		setStack(const std::stack<int>& stack);
+		void	setExpression(const std::string& expression);
+		void	setStack(const std::stack<double>& stack);
 
-		static bool	isValidExpression(const std::string expression);
 		void		compute(void);
 
+		static bool	isValidExpression(const std::string expression);
+		static int	count(const std::string& str, char c);
 	private:
 
 		std::string		_expression;
-		std::stack<int>	_stack;
+		std::stack<double>	_stack;
 
 };
 
-int	count(const std::string& str, char c);
 
 #endif

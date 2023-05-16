@@ -29,7 +29,7 @@ std::string	RPN::getExpression(void) const{
 	return this->_expression;
 }
 
-std::stack<int>	RPN::getStack(void) const{
+std::stack<double>	RPN::getStack(void) const{
 	return this->_stack;
 }
 
@@ -38,7 +38,7 @@ void	RPN::setExpression(const std::string& expression){
 	return ;
 }
 
-void	RPN::setStack(const std::stack<int>& stack){
+void	RPN::setStack(const std::stack<double>& stack){
 	this->_stack = stack;
 	return ;
 }
@@ -75,27 +75,27 @@ void	RPN::compute(void){
 		} else if (*it >= '0' && *it <= '9'){
 			this->_stack.push(*it - '0');
 		} else if (*it == '+'){
-			int	a = this->_stack.top();
+			double	a = this->_stack.top();
 			this->_stack.pop();
-			int	b = this->_stack.top();
+			double	b = this->_stack.top();
 			this->_stack.pop();
 			this->_stack.push(a + b);
 		} else if (*it == '-'){
-			int	a = this->_stack.top();
+			double	a = this->_stack.top();
 			this->_stack.pop();
-			int	b = this->_stack.top();
+			double	b = this->_stack.top();
 			this->_stack.pop();
 			this->_stack.push(b - a);
 		} else if (*it == '*'){
-			int	a = this->_stack.top();
+			double	a = this->_stack.top();
 			this->_stack.pop();
-			int	b = this->_stack.top();
+			double	b = this->_stack.top();
 			this->_stack.pop();
 			this->_stack.push(a * b);
 		} else if (*it == '/'){
-			int	a = this->_stack.top();
+			double	a = this->_stack.top();
 			this->_stack.pop();
-			int	b = this->_stack.top();
+			double	b = this->_stack.top();
 			this->_stack.pop();
 			this->_stack.push(b / a);
 		}
@@ -104,7 +104,7 @@ void	RPN::compute(void){
 	return ;
 }
 
-int	count(const std::string& str, char c){
+int	RPN::count(const std::string& str, char c){
 	int	res = 0;
 	for (size_t i = 0; i < str.length(); ++i)
 		if (str[i] == c)
