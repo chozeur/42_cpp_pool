@@ -32,9 +32,6 @@ class	BitcoinExchange {
 		std::string*					getQueriesOrder(void) const;
 		int								getQueriesCount(void) const;
 
-		bool			isDataFileValid(void);		// no const because the map is filled here
-		bool			isQueriesFileValid(void);	// no const because the map is filled here
-
 		std::string		getRefDate(std::string date) const;
 		void			fillDataMapOrder(void);
 		void			fillQueriesMapOrder(void);
