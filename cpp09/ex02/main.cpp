@@ -1,76 +1,43 @@
-#include <iostream>
-#include <list>
-
-void mergeInsertionSort(std::list<int>& arr) {
-    if (arr.size() < 2) {
-        return;
-    }
-
-    // Divide the list into two halves
-    std::list<int> left, right;
-    int size = arr.size();
-    int mid = size / 2;
-    for (int i = 0; i < mid; i++) {
-        left.push_back(arr.front());
-        arr.pop_front();
-    }
-    while (!arr.empty()) {
-        right.push_back(arr.front());
-        arr.pop_front();
-    }
-
-    // Recursively sort the two halves
-    mergeInsertionSort(left);
-    mergeInsertionSort(right);
-
-    // Merge the two sorted halves
-    arr.clear();
-    while (!left.empty() && !right.empty()) {
-        if (left.front() < right.front()) {
-            arr.push_back(left.front());
-            left.pop_front();
-        }
-        else {
-            arr.push_back(right.front());
-            right.pop_front();
-        }
-    }
-    while (!left.empty()) {
-        arr.push_back(left.front());
-        left.pop_front();
-    }
-    while (!right.empty()) {
-        arr.push_back(right.front());
-        right.pop_front();
-    }
-
-    // Perform Insertion Sort on the list
-    std::list<int>::iterator it1, it2;
-    for (it1 = arr.begin(); it1 != arr.end(); it1++) {
-        int temp = *it1;
-        it2 = it1;
-        while (it2 != arr.begin() && *(--it2) > temp) {
-            std::iter_swap(it2, std::next(it2));
-        }
-        *it2 = temp;
-    }
-}
+#include "PmergeMe.hpp"
+#include <ctime>
 
 int	main(int ac, char **av)
 {
-	std::list<int>	arr;
 
-	for (int i = 1; i < ac; ++i){
-		arr.push_back(atoi(av[i]));
-	}
+	system("clear");std::cout << std::endl;
 
-	std::list<int> arr_copy(arr);
-	mergeInsertionSort(arr_copy);
+	PmergeMe	pmm(ac, av);
 
-	for (std::list<int>::iterator i = arr_copy.begin(); i != arr_copy.end(); ++i)
-		std::cout << *i << " ";
+	std::cout << BOLD << ITALIC << "Unsorted vector: " << RESET << std::endl;
+	std::cout << ORANGE;
+	PmergeMe::printVector(pmm.getVector());
+	std::cout << RESET;
+
+	std::cout << BOLD << ITALIC << "Sorted vector: " << RESET << std::endl;
+	std::clock_t start = std::clock();
+	std::cout << GREEN;
+	PmergeMe::printVector(pmm.mergeInsertionSortVector());
+	std::cout << RESET;
+	std::clock_t end = std::clock();
+	double duration = (end - start) / (double) CLOCKS_PER_SEC;
+	std::cout << "Time taken by function: " << BLUE << duration * 1000000 << " microseconds" << RESET << std::endl;
 
 	std::cout << std::endl;
+
+	std::cout << BOLD << ITALIC << "Unsorted list: " << RESET << std::endl;
+	std::cout << ORANGE;
+	PmergeMe::printList(pmm.getList());
+	std::cout << RESET;
+
+	std::list<int>	l = pmm.getList();
+	std::cout << BOLD << ITALIC << "Sorted list: " << RESET << std::endl;
+	std::clock_t start2 = std::clock();
+	std::cout << GREEN;
+	PmergeMe::printList(pmm.mergeInsertionSortList(l));
+	std::cout << RESET;
+	std::clock_t end2 = std::clock();
+	double duration2 = (end2 - start2) / (double) CLOCKS_PER_SEC;
+	std::cout << "Time taken by function: " << BLUE << duration2 * 1000000 << " microseconds" << RESET << std::endl;
 
 	return (0);
 }
