@@ -26,9 +26,10 @@ int	main(int ac, char** av, char** env) {
 
 	std::string			queries[exchange.getQueriesCount() + 1];
 	std::stringstream	ss(exchange.getQueriesFileContent());
-	int 				i = 0;
+	int					i = 0;
 	while (getline(ss, queries[i++], '\n')) {}
 
+	bool	empty = false;
 	for (int i = 1; i < exchange.getQueriesCount(); ++i) {
 		if (queries[i].size() == 0) {
 			continue;
@@ -41,9 +42,15 @@ int	main(int ac, char** av, char** env) {
 			double				amount;
 			ss >> date >> sep >> amount;
 			std::cout << "📅 " << date << " => " << amount * exchange.getDataMap()[exchange.getRefDate(date)] << std::endl;
+			empty = true;
 		} catch (std::exception &e) {
 			std::cerr << "❗ " << e.what() << std::endl;
+			empty = true;
 		}
+	}
+
+	if (!empty) {
+		std::cout << "❗ No queries found" << std::endl;
 	}
 
 	delete[] exchange.getDataOrder();
