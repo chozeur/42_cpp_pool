@@ -114,7 +114,7 @@ std::list<int> PmergeMe::insertionSortList(std::list<int> arr) {
 	for (std::list<int>::iterator i = arr.begin(); i != arr.end(); i++) {
 		std::list<int>::iterator j = i;
 		while (j != arr.begin() && *j < *--j) {
-			std::iter_swap(j, j++);
+			std::iter_swap(j, ++j);
 		}
 	}
 	return arr;
@@ -140,7 +140,7 @@ void	PmergeMe::printVector(std::vector<int> v) {
 	std::cout << std::endl;
 }
 
-void	PmergeMe::printList(std::list<int>l ) {
+void	PmergeMe::printList(std::list<int> l) {
 	for (std::list<int>::const_iterator i = l.begin(); i != l.end(); ++i) {
 		std::cout << *i << " ";
 	}
