@@ -6,14 +6,13 @@
 /*   By: flcarval <flcarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 13:05:31 by alambert          #+#    #+#             */
-/*   Updated: 2023/06/05 15:06:52 by flcarval         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:25:27 by flcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PMERGEME_H
 # define PMERGEME_H
 
-// Libraries **************************************************************** //
 #include <iostream>
 #include <iomanip>
 #include <functional>
@@ -27,11 +26,6 @@
 #include <algorithm>
 #include <cstddef>
 
-// **************************************************************** Libraries //
-
-
-
-// Colours ****************************************************************** //
 # define RESET			"\033[37m"
 # define BOLD			"\e[1m"
 # define ITALIC			"\e[3m"
@@ -45,21 +39,6 @@
 # define YELLOW			"\033[38;5;220m"
 # define PINK			"\033[38;5;205m"
 # define WHITE			"\033[0;97m"
-
-// ****************************************************************** Colours //
-
-
-// Enums ******************************************************************** //
-// ******************************************************************** Enums //
-
-
-// Templates **************************************************************** //
-// **************************************************************** Templates //
-
-// Structs ****************************************************************** //
-// ****************************************************************** Structs //
-
-// Classes ****************************************************************** //
 
 class vectorMIS	{
 	public:
@@ -78,17 +57,17 @@ class vectorMIS	{
 
 private:
 	std::vector<int> 		_vec;
-	clock_t							_timeS;				// time start
-	clock_t							_timeE;				// time end
+	clock_t							_timeS;
+	clock_t							_timeE;
 };
 
 class listMIS	{
 public:
-	listMIS(void);										// Canonical
-	listMIS(listMIS const & toCopy);					// Canonical
-	~listMIS(void);										// Canonical
+	listMIS(void);
+	listMIS(listMIS const & toCopy);
+	~listMIS(void);
 
-	listMIS	&operator=(listMIS const & toCopy);			// Canonical
+	listMIS	&operator=(listMIS const & toCopy);
 
 	std::list<int>			 		&getL(void);
 	void							lMIS(int argc, char ** argv);
@@ -100,14 +79,10 @@ public:
 
 private:
 	std::list<int>					_lst;
-	clock_t							_timeS;				// time start
-	clock_t							_timeE;				// time end
+	clock_t							_timeS;
+	clock_t							_timeE;
 };
-// ****************************************************************** Classes //
 
-
-// Non Member functions ***************************************************** //
 bool			checkInput(int argc, char ** argv);
-// ***************************************************** Non Member functions //
 
-#endif // ******************************************************** PMERGEME_H //
+#endif
