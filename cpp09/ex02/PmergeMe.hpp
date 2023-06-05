@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alambert <alambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flcarval <flcarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 13:05:31 by alambert          #+#    #+#             */
-/*   Updated: 2023/05/31 19:19:52 by alambert         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:06:52 by flcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,27 @@
 #include <iterator>
 #include <exception>
 #include <algorithm>
-#include <cstddef> 
+#include <cstddef>
 
 // **************************************************************** Libraries //
 
 
 
 // Colours ****************************************************************** //
-#define RED "\e[0;31m"
-#define GREEN "\e[0;32m"
-#define YELLOW "\e[33m"
-#define MAGENTA "\e[35m"
-#define CLEAR "\e[0m"
+# define RESET			"\033[37m"
+# define BOLD			"\e[1m"
+# define ITALIC			"\e[3m"
+# define FORMAT_RESET	"\e[0m"
+# define RED			"\033[38;5;196m"
+# define GREEN			"\033[38;5;46m"
+# define BLUE			"\033[38;5;51m"
+# define BLU			"\033[38;5;152m"
+# define ORANGE			"\033[38;5;214m"
+# define PURPLE			"\033[38;5;98m"
+# define YELLOW			"\033[38;5;220m"
+# define PINK			"\033[38;5;205m"
+# define WHITE			"\033[0;97m"
+
 // ****************************************************************** Colours //
 
 

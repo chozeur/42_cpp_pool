@@ -3,36 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alambert <alambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flcarval <flcarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 13:05:31 by alambert          #+#    #+#             */
-/*   Updated: 2023/05/31 19:29:44 by alambert         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:10:10 by flcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 
 // Constructor Destructor *************************************************** //
-vectorMIS::vectorMIS(void)	{}
+vectorMIS::vectorMIS(void)	{return ;}
 
 vectorMIS::vectorMIS(vectorMIS const & toCopy) : _timeS(toCopy._timeS), _timeE(toCopy._timeE)	{
 	std::copy(toCopy._vec.begin(), toCopy._vec.end(), _vec.begin());
 }
 
-vectorMIS::~vectorMIS(void)	{
-	std::cout << "vectorMIS destructor called" << std::endl;
-}
+vectorMIS::~vectorMIS(void)	{return ;}
 
 
-listMIS::listMIS(void)	{}
+listMIS::listMIS(void)	{return ;}
 
 listMIS::listMIS(listMIS const & toCopy) : _timeS(toCopy._timeS), _timeE(toCopy._timeE)	{
 	std::copy(toCopy._lst.begin(), toCopy._lst.end(), _lst.begin());
 }
 
-listMIS::~listMIS(void)	{
-	std::cout << "listMIS destructor called" << std::endl;
-}
+listMIS::~listMIS(void)	{return ;}
 // *************************************************** Constructor Destructor //
 
 
@@ -161,12 +157,12 @@ void	vectorMIS::vImplMIS(void) {
     // Merge sort the pairs based on the second value (y)
     this->vPairsMerge(pairs);
 
-    // Display the sorted pairs
-    std::cout << "Vector sorted pairs: ";
-    for (i = 0; i < pairs.size(); i++) {
-        std::cout << "[" << pairs[i].first << ", " << pairs[i].second << "] ";
-    }
-    std::cout << "\n\n";
+    // // Display the sorted pairs
+    // std::cout << "Vector sorted pairs: ";
+    // for (i = 0; i < pairs.size(); i++) {
+    //     std::cout << "[" << pairs[i].first << ", " << pairs[i].second << "] ";
+    // }
+    // std::cout << "\n\n";
 
     // Extract the x values from the pairs sequence
     for (i = 0; i < pairs.size(); i++) {
@@ -189,23 +185,23 @@ void	vectorMIS::vImplMIS(void) {
     }
 
     // Display the pending values
-    std::cout << "Vector pending values: ";
-    for (i = 0; i < pendingValues.size(); i++) {
-        std::cout << pendingValues[i] << " ";
-    }
-    std::cout << "\n\n";
+    // std::cout << "Vector pending values: ";
+    // for (i = 0; i < pendingValues.size(); i++) {
+    //     std::cout << pendingValues[i] << " ";
+    // }
+    // std::cout << "\n\n";
 
     // Display the main chain values
-    std::cout << "Vector main chain: ";
-    for (i = 0; i < mainChain.size(); i++) {
-        std::cout << mainChain[i] << " ";
-    }
-    std::cout << "\n\n";
+    // std::cout << "Vector main chain: ";
+    // for (i = 0; i < mainChain.size(); i++) {
+    //     std::cout << mainChain[i] << " ";
+    // }
+    // std::cout << "\n\n";
 
 	// Generate the Jacobsthal sequence of increments up to the size of pendingValues
 	unsigned long pendingSize = pendingValues.size();
 	unsigned long jacobsthal[pendingSize];
-	unsigned long jacobsthalSize = 0;
+	// unsigned long jacobsthalSize = 0;
 
 
 	jacobsthal[0] = 2;
@@ -215,7 +211,7 @@ void	vectorMIS::vImplMIS(void) {
         jacobsthal[i] = jacobsthal[(i - 1)] + (jacobsthal[(i - 2)] * 2);
 		// std::cout << "jacobsthal[" << i << "] = " << jacobsthal[i] << ", ";
 		if (jacobsthal[i]  > pendingSize)	{
-			jacobsthalSize = i + 1;
+			// jacobsthalSize = i + 1;
 			break;
 		}
     }
@@ -249,10 +245,11 @@ void	vectorMIS::vImplMIS(void) {
 	// std::copy(mainChain.begin(), mainChain.end(), _vec.begin());
 
 	// Display the updated main chain after binary search insertion
-    std::cout << "Vector sorted sequence: ";
+    std::cout << BOLD << GREEN << "Vector sorted sequence: " << RESET;
     for (i = 0; i < mainChain.size(); i++) {
         std::cout << mainChain[i] << " ";
     }
+	std::cout << RESET << FORMAT_RESET << std::endl;
 }
 
 void	vectorMIS::vMIS(int argc, char ** argv)	{
@@ -265,10 +262,10 @@ void	vectorMIS::vMIS(int argc, char ** argv)	{
 
 	this->getV().reserve(argc - 1);
 	std::transform(argv + 1, argv + argc, std::back_inserter(_vec), std::atoi);
-	
+
 	if (this->getV().empty() != 0 || this->getV().size() != static_cast<unsigned long>(argc -1))
 		throw std::invalid_argument("vectorMIS: Invalid argument input: vector push_back issue");
-	
+
 	this->vImplMIS();
 
     std::cout << std::endl;
@@ -379,11 +376,11 @@ void 	listMIS::lImplMIS(void) {
     this->lPairsMerge(pairs);
 
     // Display the sorted pairs
-    std::cout << "List sorted pairs: ";
-    for (std::list<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
-        std::cout << "[" << it->first << ", " << it->second << "] ";
-    }
-    std::cout << "\n\n";
+    // std::cout << "List sorted pairs: ";
+    // for (std::list<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+    //     std::cout << "[" << it->first << ", " << it->second << "] ";
+    // }
+    // std::cout << "\n\n";
 
     // Extract the x values from the pairs sequence
     for (std::list<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
@@ -406,18 +403,18 @@ void 	listMIS::lImplMIS(void) {
     }
 
     // Display the pending values
-    std::cout << "List pending values: ";
-    for (std::list<int>::iterator it = pendingValues.begin(); it != pendingValues.end(); ++it) {
-        std::cout << *it << " ";
-    }
-    std::cout << "\n\n";
+    // std::cout << "List pending values: ";
+    // for (std::list<int>::iterator it = pendingValues.begin(); it != pendingValues.end(); ++it) {
+    //     std::cout << *it << " ";
+    // }
+    // std::cout << "\n\n";
 
     // Display the main chain values
-    std::cout << "List main chain: ";
-    for (std::list<int>::iterator it = mainChain.begin(); it != mainChain.end(); ++it) {
-        std::cout << *it << " ";
-    }
-    std::cout << "\n\n";
+    // std::cout << "List main chain: ";
+    // for (std::list<int>::iterator it = mainChain.begin(); it != mainChain.end(); ++it) {
+    //     std::cout << *it << " ";
+    // }
+    // std::cout << "\n\n";
 
 	// Perform binary search and insert values from pendingValues into mainChain
 	unsigned long pendingSize = pendingValues.size();
@@ -443,13 +440,14 @@ void 	listMIS::lImplMIS(void) {
 			}
 	}
 	this->_timeE = clock();
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
 	// Display the final sorted sequence
-    std::cout << "List sorted sequence: ";
+    std::cout << BOLD << BLUE << "List sorted sequence: " << RESET;
     for (std::list<int>::iterator it = mainChain.begin(); it != mainChain.end(); ++it) {
         std::cout << *it << " ";
     }
+	std::cout << RESET << FORMAT_RESET << std::endl;
 }
 
 void	listMIS::lMIS(int argc, char ** argv)	{
@@ -460,10 +458,10 @@ void	listMIS::lMIS(int argc, char ** argv)	{
 	}
 	else	{
 		std::transform(argv + 1, argv + argc, std::back_inserter(_lst), std::atoi);
-		
+
 		if (this->getL().empty() != 0 || this->getL().size() != static_cast<unsigned long>(argc -1))
 			throw std::invalid_argument("vectorMIS: Invalid argument input: vector push_back issue");
-		
+
 		this->lImplMIS();
 
 		std::cout << std::endl;
@@ -480,7 +478,7 @@ bool		checkInput(int argc, char ** argv)	{
 		for (int j = 0; argv[i][j] != '\0'; j++)
 			if (!std::isdigit(argv[i][j]))
 				return 0;
-				
+
 	return 1;
 }
 // ***************************************************** Non Member functions //
