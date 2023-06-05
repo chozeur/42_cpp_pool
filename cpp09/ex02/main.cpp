@@ -1,44 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alambert <alambert@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/29 16:34:46 by alambert          #+#    #+#             */
+/*   Updated: 2023/05/31 19:29:53 by alambert         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "PmergeMe.hpp"
-#include <ctime>
 
-int	main(int ac, char **av)
-{
+void	printArgs(int argc, char ** argv)	{
+	checkInput(argc, argv);
+	std::cout << std::endl;
+	std::cout << "// Args ===================================================================== //" << std::endl;
+	for (int i = 1; i < argc; i++)
+		std::cout << argv[i] << " ";
+	std::cout << std::endl << std::endl;
+}
 
-	system("clear");std::cout << std::endl;
+int	main(int argc, char ** argv)	{
+	if (argc < 2)	{
+		std::cerr << "Error: Invalid number of arguments." << std::endl;
+		return (1);
+	}
+	printArgs(argc, argv);
 
-	PmergeMe	pmm(ac, av);
+	vectorMIS	vec;
+	listMIS		lst;
 
-	std::cout << BOLD << ITALIC << "Unsorted vector: " << RESET << std::endl;
-	std::cout << ORANGE;
-	PmergeMe::printVector(pmm.getVector());
-	std::cout << RESET;
+	try	{
+		lst.lMIS(argc, argv);
+	}
+	catch(const std::exception& e)	{
+		std::cerr << "List: Error: " << e.what() << '\n';
+		return 1;
+	}
 
-	std::cout << BOLD << ITALIC << "Sorted vector: " << RESET << std::endl;
-	std::clock_t start = std::clock();
-	std::cout << GREEN;
-	pmm.mergeInsertionSortVector();
-	PmergeMe::printVector(pmm.getVector());
-	std::cout << RESET;
-	std::clock_t end = std::clock();
-	double duration = (end - start) / (double) CLOCKS_PER_SEC;
-	std::cout << "Time taken by function: " << BLUE << duration * 1000000 << " microseconds" << RESET << std::endl;
-
-	// std::cout << std::endl;
-
-	// std::cout << BOLD << ITALIC << "Unsorted list: " << RESET << std::endl;
-	// std::cout << ORANGE;
-	// PmergeMe::printList(pmm.getList());
-	// std::cout << RESET;
-
-	// std::list<int>	l = pmm.getList();
-	// std::cout << BOLD << ITALIC << "Sorted list: " << RESET << std::endl;
-	// std::clock_t start2 = std::clock();
-	// std::cout << GREEN;
-	// PmergeMe::printList(pmm.mergeInsertionSortList(l));
-	// std::cout << RESET;
-	// std::clock_t end2 = std::clock();
-	// double duration2 = (end2 - start2) / (double) CLOCKS_PER_SEC;
-	// std::cout << "Time taken by function: " << BLUE << duration2 * 1000000 << " microseconds" << RESET << std::endl;
-
+	try	{
+		vec.vMIS(argc, argv);
+	}
+	catch(const std::exception& e)	{
+		std::cerr << "Vector: Error: " << e.what() << '\n';
+		return 1;
+	}
+	
 	return (0);
 }
