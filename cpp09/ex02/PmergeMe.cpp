@@ -6,13 +6,12 @@
 /*   By: flcarval <flcarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 13:05:31 by alambert          #+#    #+#             */
-/*   Updated: 2023/06/05 15:10:10 by flcarval         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:24:04 by flcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 
-// Constructor Destructor *************************************************** //
 vectorMIS::vectorMIS(void)	{return ;}
 
 vectorMIS::vectorMIS(vectorMIS const & toCopy) : _timeS(toCopy._timeS), _timeE(toCopy._timeE)	{
@@ -21,7 +20,6 @@ vectorMIS::vectorMIS(vectorMIS const & toCopy) : _timeS(toCopy._timeS), _timeE(t
 
 vectorMIS::~vectorMIS(void)	{return ;}
 
-
 listMIS::listMIS(void)	{return ;}
 
 listMIS::listMIS(listMIS const & toCopy) : _timeS(toCopy._timeS), _timeE(toCopy._timeE)	{
@@ -29,12 +27,7 @@ listMIS::listMIS(listMIS const & toCopy) : _timeS(toCopy._timeS), _timeE(toCopy.
 }
 
 listMIS::~listMIS(void)	{return ;}
-// *************************************************** Constructor Destructor //
 
-
-// Member functions ********************************************************* //
-
-// -- Operators overload ---------------------------------------------------- //
 listMIS			&listMIS::operator=(listMIS const & toCopy)	{
 	this->_timeS = toCopy._timeS;
 	this->_timeE = toCopy._timeE;
@@ -48,26 +41,11 @@ vectorMIS		&vectorMIS::operator=(vectorMIS const & toCopy)	{
 	std::copy(toCopy._vec.begin(), toCopy._vec.end(), _vec.begin());
 	return (*this);
 }
-// ---------------------------------------------------- Operators overload -- //
 
-// -- Functions overload ---------------------------------------------------- //
-// ---------------------------------------------------- Functions overload -- //
+std::list<int>		&listMIS::getL(void) {return (_lst);}
 
-// -- Accessors ------------------------------------------------------------- //
-std::list<int>		&listMIS::getL(void) {
-	return (_lst);
-}
+std::vector<int>	&vectorMIS::getV(void)	{return (_vec);}
 
-
-std::vector<int>	&vectorMIS::getV(void)	{
-	return (_vec);
-}
-// ------------------------------------------------------------- Accessors -- //
-
-// -- Exceptions ------------------------------------------------------------ //
-// ------------------------------------------------------------ Exceptions -- //
-
-// -- Other member functions ------------------------------------------------ //
 void	vectorMIS::vMerge(std::vector<std::pair<int, int> >& arr, std::vector<std::pair<int, int> >& left, std::vector<std::pair<int, int> >& right) {
     unsigned long i = 0, j = 0, k = 0;
     unsigned long leftSize = left.size();
@@ -468,11 +446,7 @@ void	listMIS::lMIS(int argc, char ** argv)	{
 		std::cout << "list took: " << std::setprecision(10) << (((double)(this->_timeE - this->_timeS) / CLOCKS_PER_SEC) / (1e-6)) << " μs.\n\n";
 	}
 }
-// ----------------------------------------------- Other  member functions -- //
-// ********************************************************* Member functions //
 
-
-// Non Member functions ***************************************************** //
 bool		checkInput(int argc, char ** argv)	{
 	for (int i = 1; i < argc; i++)
 		for (int j = 0; argv[i][j] != '\0'; j++)
@@ -481,4 +455,3 @@ bool		checkInput(int argc, char ** argv)	{
 
 	return 1;
 }
-// ***************************************************** Non Member functions //
