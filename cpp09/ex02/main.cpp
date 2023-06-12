@@ -6,7 +6,7 @@
 /*   By: flcarval <flcarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:34:46 by alambert          #+#    #+#             */
-/*   Updated: 2023/06/05 15:09:04 by flcarval         ###   ########.fr       */
+/*   Updated: 2023/06/12 15:53:42 by flcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	printArgs(int argc, char ** argv)	{
 	checkInput(argc, argv);
-	// std::cout << std::endl;
 	std::cout << BOLD << YELLOW << "Numbers to sort:" << RESET << FORMAT_RESET << std::endl;
 	for (int i = 1; i < argc; i++)
 		std::cout << argv[i] << " ";

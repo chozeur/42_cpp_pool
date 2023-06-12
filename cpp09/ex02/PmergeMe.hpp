@@ -6,7 +6,7 @@
 /*   By: flcarval <flcarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 13:05:31 by alambert          #+#    #+#             */
-/*   Updated: 2023/06/05 15:25:27 by flcarval         ###   ########.fr       */
+/*   Updated: 2023/06/12 15:54:45 by flcarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,14 @@
 
 class vectorMIS	{
 	public:
-	vectorMIS(void);									// Canonical
-	vectorMIS(vectorMIS const & toCopy);				// Canonical
-	~vectorMIS(void);									// Canonical
+	vectorMIS(void);
+	vectorMIS(vectorMIS const & toCopy);
+	~vectorMIS(void);
 
-	vectorMIS	&operator=(vectorMIS const & toCopy);	// Canonical
+	vectorMIS	&operator=(vectorMIS const & toCopy);
 
 	std::vector<int> 				&getV(void);
+
 	void							vMIS(int argc, char ** argv);
 	void							vImplMIS(void);
 	void 							vMerge(std::vector<std::pair<int, int> >& arr, std::vector<std::pair<int, int> >& left, std::vector<std::pair<int, int> >& right);
@@ -69,13 +70,14 @@ public:
 
 	listMIS	&operator=(listMIS const & toCopy);
 
-	std::list<int>			 		&getL(void);
+	std::list<int>					&getL(void);
+	
 	void							lMIS(int argc, char ** argv);
 	void							lImplMIS(void);
 	void							lMerge(std::list<std::pair<int, int> >& arr, std::list<std::pair<int, int> >& left, std::list<std::pair<int, int> >& right);
 	void							lPairsMerge(std::list<std::pair<int, int> >& arr);
 	bool 							isLeftOf(std::list<int>::iterator it1, std::list<int>::iterator it2, const std::list<int>& lst);
-	std::list<int>::iterator 		lBinarySearch(const std::list<int>& arr, std::list<int>::iterator low, std::list<int>::iterator high, int target);
+	std::list<int>::iterator		lBinarySearch(const std::list<int>& arr, std::list<int>::iterator low, std::list<int>::iterator high, int target);
 
 private:
 	std::list<int>					_lst;
